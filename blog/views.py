@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 def blog_view(request):
-    posts = Post.objects.filter(published_date__lte=datetime.date.today())
+    posts = Post.objects.filter(status=1, published_date__lte=datetime.date.today())
     context = {"posts": posts}
     return render(request, "blog/blog-home.html", context)
 
