@@ -9,9 +9,9 @@
 					<div class="row d-flex align-items-center justify-content-center">
 						<div class="about-content col-lg-12">
 							<h1 class="text-white">
-								Blog Details Page				
+								{{ post.title }}			
 							</h1>	
-							<p class="text-white link-nav"><a href="index.html">Home </a>  <span class="lnr lnr-arrow-right"></span><a href="blog-home.html">Blog </a> <span class="lnr lnr-arrow-right"></span> <a href="blog-single.html"> Blog Details Page</a></p>
+							<p class="text-white link-nav"><a href="{% url 'website:index' %}">Home </a>  <span class="lnr lnr-arrow-right"></span><a href="{% url 'blog:index' %}">Blog </a> <span class="lnr lnr-arrow-right"></span>{{ post.title }}</p>
 						</div>	
 					</div>
 				</div>
