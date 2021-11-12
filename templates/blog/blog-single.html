@@ -31,14 +31,13 @@
 								</div>
 								<div class="col-lg-3  col-md-3 meta-details">
 									<ul class="tags">
-										<li><a href="#">Food,</a></li>
-										<li><a href="#">Technology,</a></li>
-										<li><a href="#">Politics,</a></li>
-										<li><a href="#">Lifestyle</a></li>
+									{% for cat in post.category.all %}
+										<li><a href="#">{{ cat.name }}{% if not forloop.last %} | {% endif %}</a></li>
+									{% endfor %}
 									</ul>
 									<div class="user-details row">
 										<p class="user-name col-lg-12 col-md-12 col-6"><a href="#">{{ post.author.get_full_name }}</a> <span class="lnr lnr-user"></span></p>
-										<p class="date col-lg-12 col-md-12 col-6"><a href="#">{{ post.published_date.date }}</a> <span class="lnr lnr-calendar-full"></span></p>
+										<p class="date col-lg-12 col-md-12 col-6"><a href="#">{{ post.published_date|date:"d M Y" }}</a> <span class="lnr lnr-calendar-full"></span></p>
 										<p class="view col-lg-12 col-md-12 col-6"><a href="#">{{ post.counted_views }} Views</a> <span class="lnr lnr-eye"></span></p>
 										<p class="comments col-lg-12 col-md-12 col-6"><a href="#">0 Comments</a> <span class="lnr lnr-bubble"></span></p>
 										<ul class="social-links col-lg-12 col-md-12 col-6">
@@ -83,7 +82,7 @@
 									{% if previous_post %}
 									<div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
 										<div class="thumb">
-											<a href="{% url 'blog:single' previous_post.id %}"><img class="img-fluid" src="{{ previous_post.image.url }}" alt=""></a>
+											<a href="{% url 'blog:single' previous_post.id %}"><img class="img-fluid" src="{{ previous_post.image.url | default:'/media/blog/default.jpg' }}" alt=""></a>
 										</div>
 										<div class="arrow">
 											<a href="{% url 'blog:single' previous_post.id %}"><span class="lnr text-white lnr-arrow-left"></span></a>
@@ -91,6 +90,12 @@
 										<div class="detials">
 											<p>Prev Post</p>
 											<a href="{% url 'blog:single' previous_post.id %}"><h4>{{previous_post.title}}</h4></a>
+										</div>
+									</div>
+									{% else %}
+									<div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+										<div class="detials">
+											<p>Start</p>
 										</div>
 									</div>
 									{% endif %}	
@@ -105,8 +110,14 @@
 											<a href="{% url 'blog:single' next_post.id %}"><span class="lnr text-white lnr-arrow-right"></span></a>
 										</div>
 										<div class="thumb">
-											<a href="{% url 'blog:single' next_post.id %}"><img class="img-fluid" src="{{ previous_post.image.url }}" alt=""></a>
+											<a href="{% url 'blog:single' next_post.id %}"><img class="img-fluid" src="{{ previous_post.image.url | default:'/media/blog/default.jpg' }}" alt=""></a>
 										</div>										
+									</div>
+									{% else %}
+									<div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+										<div class="detials">
+											<p>End</p>
+										</div>
 									</div>
 									{% endif %}									
 								</div>
@@ -238,22 +249,9 @@
 			                            <button type="submit"><i class="fa fa-search"></i></button>
 			                        </form>
 								</div>
-								<div class="single-sidebar-widget user-info-widget">
-									<img src="{% static 'img/blog/user-info.png" alt="">
-									<a href="#"><h4>Charlie Barber</h4></a>
-									<p>
-										Senior blog writer
-									</p>
-									<ul class="social-links">
-										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-										<li><a href="#"><i class="fa fa-github"></i></a></li>
-										<li><a href="#"><i class="fa fa-behance"></i></a></li>
-									</ul>
-									<p>
-										Boot camps have its supporters andit sdetractors. Some people do not understand why you should have to spend money on boot camp when you can get. Boot camps have itssuppor ters andits detractors.
-									</p>
-								</div>
+								
+								{% include 'blog/blog-writer.html' %}
+
 								<div class="single-sidebar-widget popular-post-widget">
 									<h4 class="popular-title">Popular Posts</h4>
 									<div class="popular-post-list">
@@ -295,9 +293,9 @@
 										</div>															
 									</div>
 								</div>
-								<div class="single-sidebar-widget ads-widget">
-									<a href="#"><img class="img-fluid" src="{% static 'img/blog/ads-banner.jpg' %}" alt=""></a>
-								</div>
+								
+								{% include 'blog/blog-ads.html' %}
+								
 								<div class="single-sidebar-widget post-category-widget">
 									<h4 class="category-title">Post Catgories</h4>
 									<ul class="cat-list">
