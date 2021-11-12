@@ -12,5 +12,12 @@ def blog_single(request, pid):
     post = get_object_or_404(posts, id=pid)
     post.counted_views= post.counted_views + 1
     post.save()
-    context = {"post": post}
+
+    # None if there's no previous
+    previous_post = posts.filter(id__lt=post.id).order_by('-id').first()
+    # None if there's no next
+    next_post = posts.filter(id__gt=post.id).order_by('id').first()
+
+    context = {"post": post, "previous_post":previous_post, "next_post":next_post}
     return render(request, "blog/blog-single.html", context)
+ 
