@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from blog.models import Post
+from blog.models import Post, Comment
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils import timezone
+from blog.forms import CommentForm
+from django.contrib import messages
 
 def blog_view(request, **kwargs):
     posts = Post.objects.filter(status=1, published_date__lte=timezone.now())
@@ -25,17 +27,29 @@ def blog_view(request, **kwargs):
     return render(request, "blog/blog-home.html", context)
 
 def blog_single(request, pid):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Your comment is submitted successfully.')
+        else:
+            messages.add_message(request, messages.ERROR, 'Your comment is not submitted.')
+
     posts = Post.objects.filter(status=1)
     post = get_object_or_404(posts, id=pid)
     post.counted_views= post.counted_views + 1
     post.save()
+
+    comments = Comment.objects.filter(post=post.id, approved=True)
 
     # None if there's no previous
     previous_post = posts.filter(id__lt=post.id).order_by('-id').first()
     # None if there's no next
     next_post = posts.filter(id__gt=post.id).order_by('id').first()
 
-    context = {"post": post, "previous_post":previous_post, "next_post":next_post}
+    form = CommentForm()
+
+    context = {"post": post, "comments":comments, "form":form, "previous_post":previous_post, "next_post":next_post}
     return render(request, "blog/blog-single.html", context)
 
 def blog_search(request):
