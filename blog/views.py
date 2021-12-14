@@ -4,6 +4,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils import timezone
 from blog.forms import CommentForm
 from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 def blog_view(request, **kwargs):
     posts = Post.objects.filter(status=1, published_date__lte=timezone.now())
@@ -40,17 +42,18 @@ def blog_single(request, pid):
     post.counted_views= post.counted_views + 1
     post.save()
 
-    comments = Comment.objects.filter(post=post.id, approved=True)
-
     # None if there's no previous
     previous_post = posts.filter(id__lt=post.id).order_by('-id').first()
     # None if there's no next
     next_post = posts.filter(id__gt=post.id).order_by('id').first()
 
-    form = CommentForm()
-
-    context = {"post": post, "comments":comments, "form":form, "previous_post":previous_post, "next_post":next_post}
-    return render(request, "blog/blog-single.html", context)
+    if not post.login_require:
+        comments = Comment.objects.filter(post=post.id, approved=True)
+        form = CommentForm()
+        context = {"post": post, "comments":comments, "form":form, "previous_post":previous_post, "next_post":next_post}
+        return render(request, "blog/blog-single.html", context)
+    else:
+        return HttpResponseRedirect(reverse('accounts:login'))
 
 def blog_search(request):
     posts = Post.objects.filter(status=1, published_date__lte=timezone.now())
