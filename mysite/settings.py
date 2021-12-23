@@ -64,6 +64,11 @@ MULTI_CAPTCHA_ADMIN = {
     'engine': 'simple-captcha',
 }
 
+# authentication settings
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailAuthenticationBackend',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
