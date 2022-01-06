@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+# During development only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # sites framework
 SITE_ID = 2
 
@@ -166,3 +169,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+LOGIN_URL = '/accounts/login/'
