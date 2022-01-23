@@ -10,6 +10,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INSTALLED_APPS = (
+    "compressor",
+)
+
+COMPRESS_ENABLED = True
+
 # sites framework
 SITE_ID = 2
 

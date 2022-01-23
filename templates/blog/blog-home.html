@@ -117,7 +117,7 @@
 																					
 		                    <nav class="blog-pagination justify-content-center d-flex">
 		                        <ul class="pagination">
-									{% if posts.has_previous %}
+									{% comment %} {% if posts.has_previous %}
 		                            <li class="page-item">
 		                                <a href="?page={{posts.previous_page_number}}" class="page-link" aria-label="Previous">
 		                                    <span aria-hidden="true">
@@ -125,7 +125,7 @@
 		                                    </span>
 		                                </a>
 		                            </li>
-									{% endif %}
+									{% endif %} {% endcomment %}
 									{% for i in posts.paginator.page_range %}
 										{% if posts.number == i %}
 											<li class="page-item active"><a href="?page={{i}}" class="page-link">{{i}}</a></li>
@@ -133,7 +133,7 @@
 		                            		<li class="page-item"><a href="?page={{i}}" class="page-link">{{i}}</a></li>
 										{% endif %}
 		                            {% endfor %}
-									{% if posts.has_next %}
+									{% comment %} {% if posts.has_next %}
 		                            <li class="page-item">
 		                                <a href="?page={{posts.next_page_number}}" class="page-link" aria-label="Next">
 		                                    <span aria-hidden="true">
@@ -141,7 +141,7 @@
 		                                    </span>
 		                                </a>
 		                            </li>
-									{% endif %}
+									{% endif %} {% endcomment %}
 		                        </ul>
 		                    </nav>
 						</div>
